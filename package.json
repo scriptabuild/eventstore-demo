@@ -1,5 +1,5 @@
 {
-  "name": "eventstore-demo",
+  "name": "@eventstore/eventstore-demo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
