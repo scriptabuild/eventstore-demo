@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 const defineStore = require("@scriptabuild/eventstore");
-const awaitable = require("@scriptabuild/eventstore/source/awaitable");
+const awaitable = require("@scriptabuild/awaitable");
 
 const Stopwatch = require("./stopwatch");
 const memberListModelDefinition = require("./memberList");
