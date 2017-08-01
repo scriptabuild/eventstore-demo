@@ -1,6 +1,8 @@
+const wrapInReadOnlyProxy = require("@scriptabuild/readonlyproxy")
+
 function DomainModel(dispatch, logAggregator) {
     this.listMembers = function() {
-		let members = logAggregator.getMembers();
+		let members = logAggregator.data;
         return Object.keys(members).map(key => Object.assign({
             name: key
         }, members[key]));
@@ -8,12 +10,9 @@ function DomainModel(dispatch, logAggregator) {
 }
 
 
-function LogAggregator(snapshotData, wrapInReadOnlyProxy) {
-    let members = snapshotData || {};
-
-    this.createSnapshotData = () => members;
-
-	this.getMembers = () => wrapInReadOnlyProxy(members);
+function LogAggregator(snapshot = {}) {
+    let members = snapshot;
+    Object.defineProperty(this, "data", {value: wrapInReadOnlyProxy(members), writable: false});
 
     this.eventHandlers = {
         onNewMemberRegistered(eventdata) {
@@ -36,14 +35,11 @@ function LogAggregator(snapshotData, wrapInReadOnlyProxy) {
 }
 
 
-let allHistoricalMemberListModelDefinition = {
-    snapshotConfiguration: {
-		snapshotName: "all-historical-members"
-    },
-    getEventHandlers: logAggregator => logAggregator.eventHandlers,
-    createLogAggregator: (snapshotData, wrapInReadOnlyProxy) => new LogAggregator(snapshotData, wrapInReadOnlyProxy),
+let modelDefinition = {
+	snapshotName: "all-historical-members",
+    createLogAggregator: snapshot => new LogAggregator(snapshot),
     createDomainModel: (dispatch, logAggregator) => new DomainModel(dispatch, logAggregator)
 };
 
 
-module.exports = allHistoricalMemberListModelDefinition;
+module.exports = modelDefinition;

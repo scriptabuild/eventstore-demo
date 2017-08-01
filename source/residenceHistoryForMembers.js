@@ -1,7 +1,9 @@
+const wrapInReadOnlyProxy = require("@scriptabuild/readonlyproxy")
+
 function DomainModel(dispatch, logAggregator) {
 
     this.listMembers = function() {
-		let members = logAggregator.getMembers();
+		let members = logAggregator.data;
         return Object.keys(members).map(key => Object.assign({
             name: key
         }, members[key]));
@@ -9,12 +11,9 @@ function DomainModel(dispatch, logAggregator) {
 }
 
 
-function LogAggregator(snapshotData, wrapInReadOnlyProxy) {
-    let members = snapshotData || {};
-
-    this.createSnapshotData = () => wrapInReadOnlyProxy(members);
-
-	this.getMembers = () => wrapInReadOnlyProxy(members);
+function LogAggregator(snapshot = {}) {
+    let members = snapshot;
+    Object.defineProperty(this, "data", {value: wrapInReadOnlyProxy(members), writable: false});
 
     this.eventHandlers = {
         onNewMemberRegistered(eventdata) {
@@ -22,33 +21,29 @@ function LogAggregator(snapshotData, wrapInReadOnlyProxy) {
                 throw new Error(`onNewMemberRegistered failed. ${eventdata.member.name} is allready a member.`)
             }
             members[eventdata.member.name] = {
-                residenses: [eventdata.member.address]
+                residences: [eventdata.member.address]
             };
         },
         onMemberHasMoved(eventdata) {
             if (!members[eventdata.name]) {
                 throw new Error(`onMemberHasMoved failed. ${eventdata.name} is not a member.`)
             }
-            members[eventdata.name].residenses = [...members[eventdata.name].residenses, eventdata.address];
+            members[eventdata.name].residences = [...members[eventdata.name].residences, eventdata.address];
         },
         onAddressCorrected(eventdata) {
             if (!members[eventdata.name]) {
                 throw new Error(`onAddressCorrected failed. ${eventdata.name} is not a member.`)
             }
-            let len = members[eventdata.name].residenses.length;
-            members[eventdata.name].residenses = [...members[eventdata.name].residenses.slice(0, len - 1), eventdata.address];
+            let len = members[eventdata.name].residences.length;
+            members[eventdata.name].residences = [...members[eventdata.name].residences.slice(0, len - 1), eventdata.address];
         }
     }
 }
 
 
 let modelDefinition = {
-    snapshotConfiguration: {
-        snapshotName: "residens-history",
-        createSnapshotData: logAggregator => logAggregator.createSnapshotData()
-    },
-	getEventHandlers: logAggregator => logAggregator.eventHandlers,
-	createLogAggregator: (snapshotData, wrapInReadOnlyProxy) => new LogAggregator(snapshotData, wrapInReadOnlyProxy),
+    snapshotName: "residence-history",
+	createLogAggregator: snapshot => new LogAggregator(snapshot),
 	createDomainModel: (dispatch, logAggregator) => new DomainModel(dispatch, logAggregator)
 }
 

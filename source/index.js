@@ -7,7 +7,7 @@ const awaitable = require("@scriptabuild/awaitable");
 const Stopwatch = require("./stopwatch");
 const memberListModelDefinition = require("./memberList");
 const allHistoricalMemberListModelDefinition = require("./allHistoricalMemberList");
-const residensHistoryForMembersModelDefinition = require("./residensHistoryForMembers")
+const residensHistoryForMembersModelDefinition = require("./residenceHistoryForMembers");
 
 
 const log = console.log;
@@ -97,7 +97,6 @@ const log = console.log;
 
 
 
-    // await currentMembers.snapshot();
     await currentMembers.withReadWriteInstance((membersModel, readyToCommit) => {
         membersModel.registerNewMember({
             name: "Pernille Bråthen",
@@ -127,14 +126,12 @@ const log = console.log;
 
     console.log("---");
 
-    // await allHistoricalMembers.snapshot();
     await allHistoricalMembers.withReadInstance((historicalModel) => {
         historicalModel.listMembers().forEach(contact => log(`${contact.name} - ${contact.isMember}`));
     });
 
     console.log("---");
 
-    // await residensHistoryForMembers.snapshot();
     await residensHistoryForMembers.withReadInstance((residensModel) => {
         residensModel.listMembers().forEach(contact => log(`${contact.name} - ${JSON.stringify(contact.residenses)}`));
     });
