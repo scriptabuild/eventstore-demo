@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const defineStore = require("@scriptabuild/eventstore");
+const {defineStore} = require("@scriptabuild/eventstore");
 const awaitable = require("@scriptabuild/awaitable");
 
 const Stopwatch = require("./stopwatch");
@@ -141,7 +141,7 @@ const log = console.log;
 
     let stopwatch = Stopwatch.start();
     console.log("*** before loop", stopwatch.elapsed());
-    for (let j = 0; j < 5000; j++) {
+    for (let j = 0; j < 1000; j++) {
         await currentMembers.withReadWriteInstance((membersModel, readyToCommit) => {
             for (let i = 0; i < 10; i++) {
                 membersModel.registerNewMember({
@@ -167,12 +167,4 @@ const log = console.log;
         console.log("Number of rows", residensModel.listMembers().length);
     });
     console.log("*** after read model", stopwatch.elapsed(true));
-
-    // TODO: create same stores twice to test concurrency
-    // TODO: create another store to test replaying of logs
-    // TODO: create another store to test restoring a snapshot
-    // TODO: create another store and delete old logs to test restore snapshot
-    // TODO: create another store to test restore snapshot with playback of additional logs
-    // TODO: remove a log to test that replay fails
-    // TODO: replay to stop point, using lambda -> by file time, by filename, by state of contactlist object
 })();

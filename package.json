@@ -20,7 +20,7 @@
   "homepage": "https://github.com/scriptabuild/eventstore-demo#readme",
   "dependencies": {
     "@scriptabuild/awaitable": "^1.0.1",
-    "@scriptabuild/eventstore": "^1.2.1",
-    "@scriptabuild/readonlyproxy": "^1.0.0"
+    "@scriptabuild/eventstore": "^1.2.3",
+    "@scriptabuild/eventstore-tools": "0.0.1"
   }
 }

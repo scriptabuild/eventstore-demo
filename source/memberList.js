@@ -1,4 +1,4 @@
-const wrapInReadOnlyProxy = require("@scriptabuild/readonlyproxy");
+const {readonlyProxy} = require("@scriptabuild/eventstore");
 
 function DomainModel(dispatch, logAggregator) {
 
@@ -44,7 +44,7 @@ function DomainModel(dispatch, logAggregator) {
 
 function LogAggregator(snapshot = {}) {
 	let members = snapshot;
-    Object.defineProperty(this, "data", { value: wrapInReadOnlyProxy(members), writable: false });
+    Object.defineProperty(this, "data", { value: readonlyProxy(members), writable: false });
 
     this.eventHandlers = {
         onNewMemberRegistered(eventdata) {

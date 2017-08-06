@@ -1,6 +1,6 @@
 const path = require("path");
-const defineStore = require("../source/defineStore.js");
-const logSchemaToolModelDefinition = require("../source/LogSchemaTool");
+const {defineStore} = require("@scriptabuild/eventStore");
+const logSchemaToolModelDefinition = require("@scriptabuild/eventstore-tools").logSchemaTool;
 const Stopwatch = require("../source/stopwatch");
 const folder = path.resolve(__dirname, "../temp");
 // TODO: remove folder before running tests
