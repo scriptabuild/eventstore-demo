@@ -1,9 +1,9 @@
 const path = require("path");
 const {defineStore} = require("@scriptabuild/eventStore");
 const logSchemaToolModelDefinition = require("@scriptabuild/eventstore-tools").logSchemaTool;
+// const logSchemaToolModelDefinition = require("./logSchemaTool");
 const Stopwatch = require("../source/stopwatch");
 const folder = path.resolve(__dirname, "../temp");
-// TODO: remove folder before running tests
 
 (async function () {
 

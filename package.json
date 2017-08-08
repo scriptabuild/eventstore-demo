@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "demo": "node ./source/index.js",
-    "demo-analyze": "node ./source/analyze.js"
+    "demo-analyse": "node ./source/analyse.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/scriptabuild/eventstore-demo#readme",
   "dependencies": {
     "@scriptabuild/awaitable": "^1.0.1",
-    "@scriptabuild/eventstore": "^1.2.3",
-    "@scriptabuild/eventstore-tools": "0.0.1"
+    "@scriptabuild/eventstore": "^1.2.4",
+    "@scriptabuild/eventstore-tools": "0.0.2"
   }
 }
